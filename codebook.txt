@@ -1,0 +1,21 @@
+CODEBOOK
+
+VARIABLES USED FOR THE ANALYSIS:
+	xTstTe  -> data frame which has all the data of X_test.txt in the test directory.
+	yTstTe  -> data frame which has all the data of Y_test.txt in the test directory.
+ 	subTstTe-> data frame which has all the data of subject_test.txt in the test directory.
+	xTstTr	-> data frame which has all the data of X_test.txt in the train directory.
+	yTstTr	-> data frame which has all the data of X_test.txt in the test directory.
+	subTstTr-> data frame which has all the data of X_test.txt in the test directory.
+	names(xTstTe),names(xTstTr) -> data frame which appends the feature names with the data.
+	names(yTstTe),names(yTstTr) -> data frame which appends the activity with the activity name id's.
+	names(subTstTe),names(subTstTr)-> data frame which appends the id name with the id numbers.
+	test    -> merges the data of all the files in the test directory.
+	train   -> merges the data of all the files in the train directory.
+	data	-> merges the data in both test and train directories.
+	meanstd -> Extracts the variables which has a mean/std string in them.
+	meanstd_data -> Extracts activy, id and the meanstd variables data from the data file.
+	average_data -> Will calculate the means of the above extracted data.
+	
+	
+	
