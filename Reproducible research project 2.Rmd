@@ -1,0 +1,80 @@
+---
+title: "Reproducable research project 2"
+output: html_document
+---
+
+##Analyzing the Impact of Severe Weather Events
+
+##Loading the data and relevant packages
+
+```{r}
+storm <- read.csv("repdata%2Fdata%2FStormData.csv")
+library(plyr)
+library(reshape2)
+library(ggplot2)
+```
+
+##Data Processing
+
+Using fatalities and injuries the data was aggregated using the plyr package. Sorting by fatalities first then injuries and eliminating event without documented damage to human population.
+
+##Health Impact Aggregation
+
+This segment of code selects the relevant data columns, aggregates fatalities and injuries then sorts and selects the top 10.
+
+```{r}
+##Selects the columns which include type of disaster, fatality and injury counts.
+storm_h <- storm[,c(8,23:24)]
+
+##Aggregates the sums for fatalities and injuries by event type and sorts by fatality count then by injury count (highest first).
+health_agg <- ddply(storm_h, .(EVTYPE), colwise(sum))
+health_agg <- arrange(health_agg, -FATALITIES, -INJURIES)
+
+##Considers only the top 10 most damaging events to human populations.
+top10 <- health_agg[1:10,]
+```
+
+##Economic Impact Aggregation
+
+This segment of code selects the relevant data columns, aggregates property damage and crop damage and then selects the top 25.
+
+```{r}
+##Selects the columns with type of disaster, property damage and crop damage.
+storm_e <- storm[,c(8,25,27)]
+
+##Aggregates damage amounts by event type.
+econ_agg <- ddply(storm_e, .(EVTYPE), colwise(sum))
+econ_agg <- arrange(econ_agg, -PROPDMG, -CROPDMG)
+
+##Selects 25 event types with highest damage amounts
+top25 <- econ_agg[1:25,]
+```
+
+##Health Impact Reformatting
+
+The primary objective of this code is to create useful factors for graphing. The first portion deals with injury/fatality factorization. The 2nd segment assigns an order to the 10 most dangerous events.
+
+```{r}
+##Reformats the data, which allows use of the injury/fatality distinction as a factor rather than a column. Done using the reshape2 package.
+top10p <- melt(top10, id.vars = "EVTYPE")
+
+##Orders the factors by total fatalities
+top10p$EVTYPE <- factor(top10p$EVTYPE, levels = top10p$EVTYPE[order(c(1:10))])
+```
+
+##Economic Impact Reformatting
+
+The primary objective of this code is to create useful factors for graphing. The first portion deals with property/crop damage factorization. The 2nd segment assigns an order to the 25 most dangerous events.
+
+```{r}
+#Reformats data to allow factorization
+top25p <- melt(top25, id.vars = "EVTYPE")
+
+##Orders factors by property damage totals
+top25p$EVTYPE <- factor(top25p$EVTYPE, levels = top25p$EVTYPE[order(c(1:25))])
+```
+
+##Results
+
+Based on these results we can conclusively state that tornadoes are bad.
+
